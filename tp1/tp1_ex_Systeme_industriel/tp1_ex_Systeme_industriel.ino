@@ -7,7 +7,7 @@
 #define bp1 3
 #define bp2 A0
 
-char etatPasse_bp0=0, etatPasse_bp2=0, etatPresent=0, etatSortie=0;
+char etatPasse_bp0=0, etatPasse_bp2=0, etatPresent=0;
 
 void setup() {
   pinMode(bp0,INPUT);
@@ -21,15 +21,17 @@ void setup() {
 void loop() {
   // teste appui sur bp0 (marche)
   etatPresent=digitalRead(bp0);
+  // si appui allume ledVerte
   if ( (etatPasse_bp0==LOW)&&(etatPresent==HIGH) ) 
     digitalWrite(ledVerte,HIGH);
   etatPasse_bp0=etatPresent;
   // teste appui bp2
   etatPresent=digitalRead(bp2);
+  // si appui eteint ledVerte
   if ( (etatPasse_bp2==HIGH)&&(etatPresent==LOW) ) 
     digitalWrite(ledVerte,LOW);
   etatPasse_bp2=etatPresent;
-  // teste si bp2==low
+  // si bp2==low allume ledRouge sinon eteint ledRouge
   if (etatPresent==LOW) 
     digitalWrite(ledRouge,HIGH);
     else
