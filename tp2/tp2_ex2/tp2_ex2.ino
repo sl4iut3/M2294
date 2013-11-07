@@ -1,32 +1,40 @@
 const char pinMux = 4;
 const char pinAff[8]={
   13,12,6,7,8,10,9,11};
+const char masques[8]={
+  1,2,4,8,16,32,64,128};                      // Liste des masques pour obtenir l'état d'un seul segment
 
-// maladroit: ordre des bits inversés % à la documentation
-//const unsigned char val[10]={B00111111,..,...};     // Vous avez ici l'état des segments pour afficher le chiffre 0. 
-const unsigned char val[]={
-  0xFC,0x60,0xDA,0xF2,0x66,0xB6,0xBE,0xE0,0xFE,0xF6};     // Vous avez ici l'état des segments pour afficher le chiffre 0. 
+unsigned char val[]={
+  0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7C,0x07,0x7F,0x6F};                        // Mettre la bonne valeur donnée ci-dessus
 
 void setup()
 {
   char i;
+
   for (i=0;i<8;i++) pinMode(pinAff[i],OUTPUT);    // Déclaration des 8 sorties des afficheurs
   pinMode(pinMux,OUTPUT);                         // + sortie de multiplexage (choix de l'afficheur)
   digitalWrite(pinMux,1);                         // sur l'afficheur 1
 }
 
+void affiche(char val) {
+  char i;
+  unsigned char c;
+
+  for (i=0;i<8;i++)
+  {
+    //delay(300);                               // Inutile ! permet de ralentir pour éventuellement trouver les erreurs
+    c = val & masques[i] ;                               // c dépend de val,masques et du segment qui nous intéresse (donc i)
+    if (c == 0 ) digitalWrite(pinAff[i],0);        // Modifie successivement l'état des segments a (ou patte 13)
+    else digitalWrite(pinAff[i],1);           // puis b (ou patte 12) ... selon la valeur de c
+  }
+}
+
 void loop()
 {
-  char i,s;
-  unsigned char c;
-  for (s=0;s<10;s++) {
+  int i;
+  for (i=0;i<10;i++) {
+    affiche(val[i]);
     delay(500);
-    for (i=0;i<8;i++)
-    {
-      //delay(300);                               // Inutile ! permet de ralentir pour éventuellement trouver les erreurs
-      c = (val[s]>>(7-i))&1 ;                               // c dépend nécessairement de val et du segment qui nous intéresse (donc i)
-      digitalWrite(pinAff[i],c);                      // Modifie successivement l'état des segments a (ou patte 13) puis b (ou patte 12) ...
-    }
   }
 }
 

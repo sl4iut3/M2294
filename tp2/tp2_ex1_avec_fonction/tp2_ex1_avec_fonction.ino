@@ -12,10 +12,9 @@ void setup()
     pinMode(pinMux,OUTPUT);                         // + sortie de multiplexage (choix de l'afficheur)
     digitalWrite(pinMux,1);                         // sur l'afficheur 1
 }
- 
-void loop()
-{
-    char i,s;
+
+void affiche(char val) {
+    char i;
     unsigned char c;
  
     for (i=0;i<8;i++)
@@ -25,4 +24,9 @@ void loop()
           if (c == 0 ) digitalWrite(pinAff[i],0);        // Modifie successivement l'état des segments a (ou patte 13)
                 else digitalWrite(pinAff[i],1);           // puis b (ou patte 12) ... selon la valeur de c
     }
+}
+
+void loop()
+{
+  affiche(val);
 }
