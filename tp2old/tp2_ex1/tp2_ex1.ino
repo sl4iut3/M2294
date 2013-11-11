@@ -1,3 +1,5 @@
+// ne pas utiliser, ancienne formulation
+
 const char pinMux = 4;
 const char pinAff[8]={13,12,6,7,8,10,9,11};
  
